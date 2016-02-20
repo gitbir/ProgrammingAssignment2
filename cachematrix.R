@@ -1,28 +1,31 @@
-## I want a function to cache a matrix and its inverse, 
+## I want a function to store a matrix and its inverse, 
 ## with methods to get and set the inverse.
 ## I want another function to determine the inverse of the matrix.
 ## If the inverse is already cached, it shall used the cached value and return it. 
 ## If not, it shall calculate it, store it in the cache and return it.
 
-## create a matrix object with functions to get and set its inverse
+## create a matrix object with functions (think: methods) to get and set its inverse
 
 makeCacheMatrix <- function(x = matrix()) {
-        invers <- NULL
-        # no set method, because the original matrix object shall not be changed
+        invers <- NULL 
+        ## if matrix gets new values, invers is emptied
+        setMatrix <- function(y) {
+                x <<- y
+                invers <<- NULL
+        }        
         getMatrix <- function(){x}
         setInverse <-function(newValue){invers <<- newValue}
         getInverse <- function(){invers}   
-        list(getMatrix=getMatrix, 
+        list(getMatrix=getMatrix,
+             setMatrix=setMatrix,
              setInverse=setInverse,
              getInverse=getInverse)        
 }
 
-## Return a matrix that is the inverse of 'x'
-## Look the value up in the environment of x and return it if it is there.
-## If not, calculate it, set it in the environment of x and return it.
+## return the inverse of matrix x, or calculate and return if cache is empty
 
 cacheSolve <- function(x, ...) {
-        ## does the inverse already exist?        
+        ## is the inverse cached?        
         invers <- x$getInverse()
         if(!is.null(invers)) {
                 message("getting cached data")
@@ -35,5 +38,9 @@ cacheSolve <- function(x, ...) {
         x$setInverse(invers) 
         ## return it
         invers
+        
+## to do: not necessary because assignment says so: 
+## make sure the matrix is invertible before trying.
+## nrow(mymatrix)==ncol(mymatrix)        
+        
 }
-# not necessary because of assignment: make sure the matrix is invertible
